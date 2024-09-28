@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const BASE_API = process.env.VUE_APP_BASE_API;
-const SECRET_KEY = process.env.VUE_API_KEY;
+const SECRET_KEY = process.env.VUE_APP_API_KEY;
 
 const service = axios.create({
-  baseURL: BASE_API
+  baseURL: BASE_API,
 });
 
 /* Настройка всех запросов */
@@ -19,7 +19,7 @@ service.interceptors.request.use(
   },
   (error) => {
     Promise.reject(error);
-  }
+  },
 );
 
 /* Настройка всех ответов */
@@ -36,7 +36,7 @@ service.interceptors.response.use(
     }
 
     return Promise.reject(new Error(error));
-  }
+  },
 );
 
 export { BASE_API };

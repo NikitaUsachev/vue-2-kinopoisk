@@ -3,7 +3,16 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-Vue.config.productionTip = false;
+/* Plugins */
+import paginate from 'vue-pagination-2';
+
+/* Styles */
+import './assets/styles/app.css';
+
+const app = Vue;
+
+app.component('VuePagination', paginate);
+app.config.productionTip = false;
 
 new Vue({
   router,
