@@ -1,5 +1,8 @@
 <template>
   <div>
+    <MoonLoader
+      :loading="loading"
+    />
     <div
       class="main grid grid-cols-5 gap-5 w-8/12 mx-auto bg-black content-center p-10">
       <div
@@ -10,7 +13,6 @@
         <FilmComponent
           :film="film"
         />
-
       </div>
     </div>
   </div>
@@ -19,10 +21,12 @@
 <script>
 import { getTopFilms } from '@/api/films';
 import FilmComponent from '@/components/FilmComponent.vue';
+import MoonLoader from '@/components/SpinnerComponent.vue';
 
 export default {
   components: {
     FilmComponent,
+    MoonLoader,
   },
   data() {
     return {
@@ -48,11 +52,11 @@ export default {
 
         this.films = items;
         this.total = total;
-        // setTimeout(async () => {
-        //   this.films = await getTopFilms();
-        // }, 3000);
-      } catch (e) {
-        console.log(e);
+        setTimeout(async () => {
+          this.films = await getTopFilms();
+        }, 10000);
+      } catch (error) {
+        console.log(error);
       } finally {
         this.loading = false;
       }
