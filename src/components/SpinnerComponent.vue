@@ -5,7 +5,7 @@
     <MoonLoader
       :loading="loading"
       color="#fff"
-      size="60px" />
+      size="80px" />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   props: {
     loading: {
       type: Boolean,
-      required: true,
+      default: true,
     },
   },
 };

@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 
 /* Plugins */
-import paginate from 'vue-pagination-2';
+import Paginate from 'vue-pagination-2';
 import MoonLoader from 'vue-spinner/src/MoonLoader.vue';
 
 /* Styles */
@@ -12,8 +12,8 @@ import './assets/styles/app.css';
 
 const app = Vue;
 
-app.component('VuePagination', paginate);
-Vue.component('MoonLoader', MoonLoader);
+app.component('VuePagination', Paginate);
+app.component('MoonLoader', MoonLoader);
 app.config.productionTip = false;
 
 new Vue({

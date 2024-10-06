@@ -1,7 +1,10 @@
 module.exports = {
-  purge: [
-    './src/**/*.vue',
-  ],
+  purge: {
+    content: ['./src/**/*.{vue,js,html}'],
+    options: {
+      safelist: [],
+    },
+  },
   darkMode: false,
   theme: {
     extend: {},
@@ -10,4 +13,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};

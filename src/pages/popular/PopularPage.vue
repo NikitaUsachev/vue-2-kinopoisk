@@ -3,15 +3,33 @@
     <MoonLoader
       :loading="loading"
     />
+
     <div
-      class="main grid grid-cols-5 gap-5 w-8/12 mx-auto bg-black content-center p-10">
+      v-if="!loading"
+      class="main grid grid-cols-5
+      gap-5 w-8/12 mx-auto bg-black
+      content-center p-10
+      cursor-pointer"
+    >
       <div
         class="films mb-10 w-56"
-        v-for="film in films"
+        v-for="(film, index) in films"
         :key="film.nameRu"
+        role="button"
+        :tabindex="index"
+        @click="goToMovie(film.kinopoiskId)"
       >
         <FilmComponent
           :film="film"
+          @update="toggleFavorite"
+        />
+      </div>
+      <div class="mt-6 text-white flex items-center gap-2">
+        <VuePagination
+          v-model="page"
+          :per-page="limit"
+          :records="total"
+          @paginate="getData"
         />
       </div>
     </div>
@@ -32,6 +50,7 @@ export default {
     return {
       loading: null,
       films: [],
+      favoritesFilms: JSON.parse(localStorage.getItem('favorites')) || [],
       limit: 20,
       page: 1,
       total: 0,
@@ -50,31 +69,66 @@ export default {
 
         const { items, total } = await getTopFilms(payload);
 
+        if (items.length) {
+          items.forEach((el) => {
+            el.favorite = false;
+
+            const exist = this.favoritesFilms.find(item => item.kinopoiskId === el.kinopoiskId);
+
+            if (exist) {
+              el.favorite = true;
+            } else {
+              el.favorite = false;
+            }
+          });
+        }
+
         this.films = items;
         this.total = total;
-        setTimeout(async () => {
-          this.films = await getTopFilms();
-        }, 10000);
       } catch (error) {
         console.log(error);
       } finally {
         this.loading = false;
       }
     },
-    ratingColor(rating) {
-      if (rating > 7.5) {
-        return 'text-yellow-500';
+    toggleFavorite(item) {
+      /* Находим элемент в избранном */
+      if (this.favoritesFilms.find((el) => el.kinopoiskId === item.kinopoiskId)) {
+        const index = this.favoritesFilms.findIndex(el => el.kinopoiskId === item.kinopoiskId);
+
+        this.favoritesFilms.splice(index, 1);
+      } else {
+        const obj = { ...item };
+
+        obj.favorite = true;
+
+        this.favoritesFilms.push(obj);
       }
-      if (rating > 4.5) {
-        return 'text-yellow-400';
-      }
-      return 'text-red-700';
+
+      /* Находим элемент в нашем массивe и меняем favorite */
+      const idx = this.films.findIndex((el) => el === item);
+
+      this.films[idx].favorite = !this.films[idx].favorite
+
+      /* Сохраняем состояние */
+      localStorage.setItem('favorites', JSON.stringify(this.favoritesFilms));
     },
-  },
-  computed: {
+    goToMovie(kinopoiskId) {
+      this.$router.push(`/movie/${kinopoiskId}`);
+    },
   },
   async mounted() {
     await this.getData();
   },
 };
 </script>
+
+<style scoped>
+:deep(.VuePagination__pagination) {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  gap: 10px;
+
+}
+</style>

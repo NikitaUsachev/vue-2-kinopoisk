@@ -1,9 +1,6 @@
-const tailwindcss = require('tailwindcss')
-const autoprefixer = require('autoprefixer')
-
 module.exports = {
   plugins: [
-    tailwindcss,
-    autoprefixer
-  ]
-}
+    require('@tailwindcss/postcss7-compat'), // Используем постCSS7-совместимую версию Tailwind
+    require('autoprefixer'),
+  ],
+};
