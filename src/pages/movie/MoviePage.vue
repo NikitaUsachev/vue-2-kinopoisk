@@ -11,6 +11,7 @@
     >
       <MovieComponent
         :film="film"
+        @update="toggleFavorite"
       />
     </div>
 
@@ -44,23 +45,37 @@ export default {
           return;
         }
 
-        console.log('Поиск фильма по его ID:', movieID);
 
         const data = await getMovie({id: movieID});
 
-        console.log('Полученные данные о фильме:', data);
 
         if(data) {
           data.favorite = !!this.favoritesFilms
             .find(item => item.kinopoiskId === data.kinopoiskId);
           this.film = data;
-          console.log('Информация о фильме: ', this.film)
         }
       } catch (error){
         console.error('Произошла ошибка при получение данных фильма :', error);
       } finally {
         this.loading = false;
       }
+    },
+    toggleFavorite(item) {
+      if (this.favoritesFilms.find((el) => el.kinopoiskId === item.kinopoiskId)) {
+        const index = this.favoritesFilms.findIndex(el => el.kinopoiskId === item.kinopoiskId);
+
+        this.favoritesFilms.splice(index, 1);
+      } else {
+        const obj = { ...item };
+
+        obj.favorite = true;
+
+        this.favoritesFilms.push(obj);
+      }
+
+      this.film.favorite = !this.film.favorite;
+
+      localStorage.setItem('favorites', JSON.stringify(this.favoritesFilms));
     },
   },
   async mounted() {

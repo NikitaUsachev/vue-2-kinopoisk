@@ -82,7 +82,6 @@ export default {
             }
           });
         }
-
         this.films = items;
         this.total = total;
       } catch (error) {
@@ -129,6 +128,5 @@ export default {
   justify-items: center;
   align-items: center;
   gap: 10px;
-
 }
 </style>

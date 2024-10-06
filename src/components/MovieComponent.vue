@@ -41,9 +41,13 @@
           {{ film.description }}
         </p>
         <button
+          @click="addFilmInFav(film)"
           class="border mt-10 py-2 px-2 rounded-full w-56 bg-yellow-500 border-yellow-600"
         >
-          Добавить в избранное
+          <span v-if="film.favorite">
+            Убрать
+          </span>
+          <span v-else>Добавить в избранное</span>
         </button>
       </div>
     </div>
@@ -55,7 +59,8 @@ export default {
   props: {
     film: Object,
   },
-  emits:['update'],
+  emits: ['update'],
+
   methods: {
     genreList() {
       return this.film.genres
