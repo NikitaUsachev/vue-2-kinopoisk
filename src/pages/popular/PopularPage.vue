@@ -25,12 +25,7 @@
         />
       </div>
       <div class="mt-6 text-white flex items-center gap-2">
-        <VuePagination
-          v-model="page"
-          :per-page="limit"
-          :records="total"
-          @paginate="getData"
-        />
+        <VuePaginate/>
       </div>
     </div>
   </div>
