@@ -25,7 +25,17 @@
         />
       </div>
       <div class="mt-6 text-white flex items-center gap-2">
-        <VuePaginate/>
+        <VuePaginate
+          v-model="page"
+          :page-count="pageCount"
+          :page-range="3"
+          :click-handler="handlerPageClick"
+          :prev-text="'Prev'"
+          :next-text="'Next'"
+          :container-class="'VuePagination__pagination'"
+          :page-class="'VuePagination__page'"
+          :active-class="'active-page'"
+        />
       </div>
     </div>
   </div>
@@ -50,6 +60,11 @@ export default {
       page: 1,
       total: 0,
     };
+  },
+  computed: {
+    pageCount(){
+      return Math.ceil(this.total / this.limit)
+    },
   },
   methods: {
     async getData() {
@@ -99,7 +114,7 @@ export default {
         this.favoritesFilms.push(obj);
       }
 
-      /* Находим элемент в нашем массивe и меняем favorite */
+      /* Находим элемент в нашем массиве и меняем favorite */
       const idx = this.films.findIndex((el) => el === item);
 
       this.films[idx].favorite = !this.films[idx].favorite
@@ -109,6 +124,11 @@ export default {
     },
     goToMovie(kinopoiskId) {
       this.$router.push(`/movie/${kinopoiskId}`);
+    },
+    handlerPageClick(currentPage) {
+      this.page = currentPage
+      console.log(`Страница: ${currentPage}`)
+      this.getData();
     },
   },
   async mounted() {
@@ -120,8 +140,14 @@ export default {
 <style scoped>
 :deep(.VuePagination__pagination) {
   display: flex;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
   gap: 10px;
+
+}
+
+:deep(.active-page) {
+  font-weight: bold;
+  color: #ff7300;
 }
 </style>

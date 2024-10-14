@@ -10,11 +10,11 @@ import MoonLoader from 'vue-spinner/src/MoonLoader.vue';
 /* Styles */
 import './assets/styles/app.css';
 
-const app = Vue;
+// const app = Vue;
 
-app.component('VuePaginate', Paginate);
-app.component('MoonLoader', MoonLoader);
-app.config.productionTip = false;
+Vue.component('VuePaginate', Paginate);
+Vue.component('MoonLoader', MoonLoader);
+Vue.config.productionTip = false;
 
 new Vue({
   router,
