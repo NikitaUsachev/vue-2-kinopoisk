@@ -30,10 +30,9 @@
           :page-count="pageCount"
           :page-range="3"
           :click-handler="handlerPageClick"
-          :prev-text="'Prev'"
-          :next-text="'Next'"
+          :prev-text="'«'"
+          :next-text="'»'"
           :container-class="'VuePagination__pagination'"
-          :page-class="'VuePagination__page'"
           :active-class="'active-page'"
         />
       </div>
@@ -43,6 +42,7 @@
 
 <script>
 import { getTopFilms } from '@/api/films';
+import { mapGetters, mapMutations } from "vuex";
 import FilmComponent from '@/components/FilmComponent.vue';
 import MoonLoader from '@/components/SpinnerComponent.vue';
 
@@ -55,18 +55,25 @@ export default {
     return {
       loading: null,
       films: [],
-      favoritesFilms: JSON.parse(localStorage.getItem('favorites')) || [],
       limit: 20,
       page: 1,
       total: 0,
     };
   },
   computed: {
+    ...mapGetters({
+      favoritesFilms: 'favoritesFilms'
+    }),
     pageCount(){
       return Math.ceil(this.total / this.limit)
     },
   },
   methods: {
+    ...mapMutations({
+      SET_FAVORITES_FILMS: 'SET_FAVORITE_FILMS',
+      ADD_FAVORITE_FILM: 'ADD_FAVORITE_FILM',
+      REMOVE_FAVORITE_FILM: 'REMOVE_FAVORITE_FILM',
+    }),
     async getData() {
       try {
         this.loading = true;
@@ -105,13 +112,13 @@ export default {
       if (this.favoritesFilms.find((el) => el.kinopoiskId === item.kinopoiskId)) {
         const index = this.favoritesFilms.findIndex(el => el.kinopoiskId === item.kinopoiskId);
 
-        this.favoritesFilms.splice(index, 1);
+        this.REMOVE_FAVORITE_FILM(index);
       } else {
         const obj = { ...item };
 
         obj.favorite = true;
 
-        this.favoritesFilms.push(obj);
+        this.ADD_FAVORITE_FILM(obj);
       }
 
       /* Находим элемент в нашем массиве и меняем favorite */
@@ -120,15 +127,16 @@ export default {
       this.films[idx].favorite = !this.films[idx].favorite
 
       /* Сохраняем состояние */
-      localStorage.setItem('favorites', JSON.stringify(this.favoritesFilms));
+      this.SET_FAVORITES_FILMS(this.favoritesFilms);
+
     },
     goToMovie(kinopoiskId) {
       this.$router.push(`/movie/${kinopoiskId}`);
     },
-    handlerPageClick(currentPage) {
+    async handlerPageClick(currentPage) {
       this.page = currentPage
       console.log(`Страница: ${currentPage}`)
-      this.getData();
+      await this.getData();
     },
   },
   async mounted() {

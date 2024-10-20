@@ -60,7 +60,6 @@ export default {
     film: Object,
   },
   emits: ['update'],
-
   methods: {
     genreList() {
       return this.film.genres

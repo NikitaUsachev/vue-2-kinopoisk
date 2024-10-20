@@ -13,6 +13,7 @@
           to="/favorites">
           Буду смотреть
         </router-link>
+        <span class="pr-3 text-xl text-yellow-500">{{ favoriteCounter }}</span>
       </nav>
       <div class="flex ml-auto">
         <label for="search-film">
@@ -56,3 +57,23 @@
     </div>
   </header>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+  // ...
+  computed: {
+    // mix the getters into computed with object spread operator
+    // ...mapGetters([
+    //   'doneTodosCount',
+    //   'anotherGetter',
+    //   // ...
+    // ])
+    ...mapGetters({
+        favoriteCounter: 'favoriteFilmsCounter'
+    }),
+  }
+
+}
+</script>

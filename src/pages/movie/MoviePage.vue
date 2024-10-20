@@ -27,7 +27,7 @@ export default {
     MoonLoader,
     MovieComponent,
   },
-  data(){
+  data() {
     return{
       loading: true,
       film: null,
@@ -61,8 +61,13 @@ export default {
       }
     },
     toggleFavorite(item) {
-      if (this.favoritesFilms.find((el) => el.kinopoiskId === item.kinopoiskId)) {
-        const index = this.favoritesFilms.findIndex(el => el.kinopoiskId === item.kinopoiskId);
+      if (this.favoritesFilms
+        .find((el) =>
+          el.kinopoiskId === item.kinopoiskId))
+      {
+        const index = this.
+        favoritesFilms.findIndex(el =>
+          el.kinopoiskId === item.kinopoiskId);
 
         this.favoritesFilms.splice(index, 1);
       } else {
