@@ -3,17 +3,31 @@ export const favorite = {
   state: {
     films: [],
     loading: null,
+    search: '',
   },
   /* computed */
   getters: {
     favoriteFilmsCounter (state) {
       return state.films.length;
     },
-    favoritesFilms: (state) => state.films,
+    favoritesFilms (state){
+      if (state.search) {
+        return state.films
+          .filter((item) => item.nameRu
+            .toLowerCase()
+            .indexOf(state.search
+              .toLowerCase()) !== -1);
+      } else {
+        return state.films;
+      }
+    },
     loading: (state) => state.loading
   },
   /* Здесь изменять state */
   mutations: {
+    SET_SEARCH: (state, value) => {
+      state.search = value;
+    },
     SET_LOADING: (state, value) => {
       state.loading = value
     },
@@ -21,7 +35,7 @@ export const favorite = {
       state.films.push(value);
     },
     SET_FAVORITE_FILMS: (state, value) => {
-      state.favoritesFilms = value;
+      state.films = value;
 
       localStorage.setItem('favorites', JSON.stringify(value));
     },
@@ -32,13 +46,12 @@ export const favorite = {
   /* Запрос данных async / await */
   actions: {
     getDataFavFilms({ commit }) {
-      console.log(123);
       commit('SET_LOADING', true)
 
       setTimeout(() => {
         commit('SET_FAVORITE_FILMS', JSON.parse(localStorage.getItem('favorites')) || [])
         commit('SET_LOADING', false)
       }, 1500);
-    }
+    },
   },
 };

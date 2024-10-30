@@ -34,7 +34,6 @@ export default {
   },
   data() {
     return {
-      loading: null,
       film: [],
     };
   },
@@ -47,7 +46,9 @@ export default {
   methods: {
     ...mapActions(['getDataFavFilms']),
     toggleFavorite(film) {
-        const index = this.favoritesFilms.findIndex(item => item.id === film.id);
+        const index = this.favoritesFilms
+          .findIndex(item => item.id === film.id);
+
         if (index !== -1) {
           this.$store.commit('REMOVE_FAVORITE_FILM', index);
         } else {

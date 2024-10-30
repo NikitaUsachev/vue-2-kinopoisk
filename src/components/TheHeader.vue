@@ -13,11 +13,21 @@
           to="/favorites">
           Буду смотреть
         </router-link>
-        <span class="pr-3 text-xl text-yellow-500">{{ favoriteCounter }}</span>
+        <span class="pr-10 text-xl text-yellow-500">{{ favoriteCounter }}</span>
+        <router-link
+          class="pr-10 text-xl text-yellow-500"
+          to="/search"
+        >
+          Поиск
+        </router-link>
       </nav>
-      <div class="flex ml-auto">
+      <div
+        v-if="$route.name === 'favorites'"
+        class="flex ml-auto"
+      >
         <label for="search-film">
           <input
+            v-model="inputSearch"
             type="search"
             class="relative m-0 block flex-auto rounded-xl border border-solid border-gray-400
               border-neutral-200 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base
@@ -31,6 +41,7 @@
             aria-label="Search"
             id="search-film"
             aria-describedby="button-addon2"
+            @input="search"
           />
         </label>
         <span
@@ -59,10 +70,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 
 export default {
-  // ...
+  data() {
+    return {
+      inputSearch: '',
+    }
+  },
   computed: {
     // mix the getters into computed with object spread operator
     // ...mapGetters([
@@ -73,7 +88,22 @@ export default {
     ...mapGetters({
         favoriteCounter: 'favoriteFilmsCounter'
     }),
+  },
+  methods: {
+    ...mapMutations(['SET_SEARCH']),
+    search() {
+      this.SET_SEARCH(this.inputSearch);
+    },
+  },
+  watch: {
+    '$route.name': {
+      handler: function() {
+        this.inputSearch = '';
+        this.SET_SEARCH('');
+      },
+      deep: true,
+      immediate: true
+    }
   }
-
 }
 </script>

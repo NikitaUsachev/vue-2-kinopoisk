@@ -2,8 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import popular from './routes/popular';
 import favorite from './routes/favorite';
-import search from './routes/search';
 import movies from './routes/movies';
+import search from './routes/search';
 
 Vue.use(VueRouter);
 

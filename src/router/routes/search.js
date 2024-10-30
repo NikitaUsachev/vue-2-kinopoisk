@@ -1,7 +1,7 @@
 export default [
   {
     path: '/search',
-    name: 'search',
+    name: 'Search',
     component: () => import('@/pages/search/SearchPage.vue'),
   },
 ];

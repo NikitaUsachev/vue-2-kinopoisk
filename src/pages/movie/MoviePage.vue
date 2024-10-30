@@ -45,9 +45,7 @@ export default {
           return;
         }
 
-
         const data = await getMovie({id: movieID});
-
 
         if(data) {
           data.favorite = !!this.favoritesFilms
