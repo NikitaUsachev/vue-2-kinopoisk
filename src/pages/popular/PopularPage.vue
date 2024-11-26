@@ -6,18 +6,17 @@
 
     <div
       v-if="!loading"
-      class="main grid grid-cols-5
-      gap-5 w-8/12 mx-auto bg-black
-      content-center p-10
+      class="main grid grid-cols-5 gap-5 w-8/12 mx-auto
+      bg-black content-center p-10
       cursor-pointer"
     >
       <div
-        class="films mb-10 w-56"
         v-for="(film, index) in films"
         :key="film.nameRu"
         role="button"
         :tabindex="index"
         @click="goToMovie(film.kinopoiskId)"
+        class="films mb-10 w-56"
       >
         <FilmComponent
           :film="film"
@@ -41,10 +40,10 @@
 </template>
 
 <script>
-import { getTopFilms } from '@/api/films';
-import { mapGetters, mapMutations } from "vuex";
-import FilmComponent from '@/components/FilmComponent.vue';
-import MoonLoader from '@/components/SpinnerComponent.vue';
+import { getTopFilms } from "@/api/films";
+import { mapActions, mapGetters, mapMutations } from "vuex";
+import FilmComponent from "@/components/FilmComponent.vue";
+import MoonLoader from "@/components/SpinnerComponent.vue";
 
 export default {
   components: {
@@ -62,24 +61,27 @@ export default {
   },
   computed: {
     ...mapGetters({
-      favoritesFilms: 'favoritesFilms'
+      favoritesFilms: "favoritesFilms",
     }),
-    pageCount(){
-      return Math.ceil(this.total / this.limit)
+    pageCount() {
+      return Math.ceil(this.total / this.limit);
     },
   },
   methods: {
     ...mapMutations({
-      SET_FAVORITES_FILMS: 'SET_FAVORITE_FILMS',
-      ADD_FAVORITE_FILM: 'ADD_FAVORITE_FILM',
-      REMOVE_FAVORITE_FILM: 'REMOVE_FAVORITE_FILM',
+      SET_FAVORITES_FILMS: "SET_FAVORITE_FILMS",
+      ADD_FAVORITE_FILM: "ADD_FAVORITE_FILM",
+      REMOVE_FAVORITE_FILM: "REMOVE_FAVORITE_FILM",
+    }),
+    ...mapActions({
+      TOGGLE_TO_FAVORITE: 'TOGGLE_TO_FAVORITE',
     }),
     async getData() {
       try {
         this.loading = true;
 
         const payload = {
-          type: 'TOP_250_MOVIES',
+          type: "TOP_250_MOVIES",
           limit: this.limit,
           page: this.page,
         };
@@ -90,7 +92,8 @@ export default {
           items.forEach((el) => {
             el.favorite = false;
 
-            const exist = this.favoritesFilms.find(item => item.kinopoiskId === el.kinopoiskId);
+            const exist = this.favoritesFilms
+            .find((item) => item.kinopoiskId === el.kinopoiskId);
 
             if (exist) {
               el.favorite = true;
@@ -108,34 +111,19 @@ export default {
       }
     },
     toggleFavorite(item) {
-      /* Находим элемент в избранном */
-      if (this.favoritesFilms.find((el) => el.kinopoiskId === item.kinopoiskId)) {
-        const index = this.favoritesFilms.findIndex(el => el.kinopoiskId === item.kinopoiskId);
-
-        this.REMOVE_FAVORITE_FILM(index);
-      } else {
-        const obj = { ...item };
-
-        obj.favorite = true;
-
-        this.ADD_FAVORITE_FILM(obj);
-      }
-
+      this.TOGGLE_TO_FAVORITE(item)
       /* Находим элемент в нашем массиве и меняем favorite */
       const idx = this.films.findIndex((el) => el === item);
 
-      this.films[idx].favorite = !this.films[idx].favorite
-
+      this.films[idx].favorite = !this.films[idx].favorite;
       /* Сохраняем состояние */
       this.SET_FAVORITES_FILMS(this.favoritesFilms);
-
     },
     goToMovie(kinopoiskId) {
       this.$router.push(`/movie/${kinopoiskId}`);
     },
     async handlerPageClick(currentPage) {
-      this.page = currentPage
-      console.log(`Страница: ${currentPage}`)
+      this.page = currentPage;
       await this.getData();
     },
   },
@@ -151,7 +139,6 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 10px;
-
 }
 
 :deep(.active-page) {

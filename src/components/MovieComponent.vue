@@ -42,12 +42,19 @@
         </p>
         <button
           @click="addFilmInFav(film)"
-          class="border mt-10 py-2 px-2 rounded-full w-56 bg-yellow-500 border-yellow-600"
+          class="border mt-10 py-2 px-2 rounded-full w-56
+          bg-yellow-500 border-yellow-600"
         >
-          <span v-if="film.favorite">
+          <span
+            v-if="film.favorite"
+          >
             Убрать
           </span>
-          <span v-else>Добавить в избранное</span>
+          <span
+            v-else
+          >
+            Добавить в избранное
+          </span>
         </button>
       </div>
     </div>
@@ -55,6 +62,8 @@
 </template>
 
 <script>
+
+
 export default {
   props: {
     film: Object,

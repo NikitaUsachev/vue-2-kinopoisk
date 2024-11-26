@@ -22,10 +22,11 @@
 
       <div
         v-if="!loading && searchResult">
-        <MovieComponent
+        <FilmComponent
           v-for="(film, index) in searchedFilms"
           :key="index"
           :film="film"
+          class=""
         />
       </div>
       <div
@@ -43,10 +44,12 @@
 import MovieComponent from "@/components/MovieComponent.vue";
 import MoonLoader from "@/components/SpinnerComponent.vue";
 import { mapActions, mapGetters } from "vuex";
+import FilmComponent from "@/components/FilmComponent.vue";
 
 export default {
   components: {
-    MovieComponent,
+    FilmComponent,
+    // MovieComponent,
     MoonLoader,
   },
   data() {

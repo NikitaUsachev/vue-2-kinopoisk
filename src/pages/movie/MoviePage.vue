@@ -19,6 +19,7 @@
 </template>
 <script>
 import { getMovie } from "@/api/films";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import MoonLoader from "@/components/SpinnerComponent.vue";
 import MovieComponent from "@/components/MovieComponent.vue";
 
@@ -28,13 +29,21 @@ export default {
     MovieComponent,
   },
   data() {
-    return{
+    return {
       loading: true,
       film: null,
       favoritesFilms: JSON.parse(localStorage.getItem('favorites')) || [],
     }
   },
   methods: {
+    ...mapMutations({
+      SET_FAVORITES_FILMS: "SET_FAVORITE_FILMS",
+      ADD_FAVORITE_FILM: "ADD_FAVORITE_FILM",
+      REMOVE_FAVORITE_FILM: "REMOVE_FAVORITE_FILM",
+    }),
+    ...mapActions({
+      TOGGLE_TO_FAVORITE: "TOGGLE_TO_FAVORITE",
+    }),
     async getData() {
       try {
         this.loading = true;
@@ -44,7 +53,6 @@ export default {
           console.error('Не приходит ID фильма');
           return;
         }
-
         const data = await getMovie({id: movieID});
 
         if(data) {
@@ -59,23 +67,8 @@ export default {
       }
     },
     toggleFavorite(item) {
-      if (this.favoritesFilms
-        .find((el) =>
-          el.kinopoiskId === item.kinopoiskId))
-      {
-        const index = this.
-        favoritesFilms.findIndex(el =>
-          el.kinopoiskId === item.kinopoiskId);
-
-        this.favoritesFilms.splice(index, 1);
-      } else {
-        const obj = { ...item };
-
-        obj.favorite = true;
-
-        this.favoritesFilms.push(obj);
-      }
-
+      this.TOGGLE_TO_FAVORITE(item)
+    /* Меняет состояние кнопки */
       this.film.favorite = !this.film.favorite;
 
       localStorage.setItem('favorites', JSON.stringify(this.favoritesFilms));

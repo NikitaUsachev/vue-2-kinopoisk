@@ -1,5 +1,4 @@
 import { getSearchFilms } from "@/api/films";
-import logInIcon from "vue-feather-icons/icons/LogInIcon";
 
 export const search = {
   state: {

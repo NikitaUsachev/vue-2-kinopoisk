@@ -1,11 +1,14 @@
 <template>
   <div
     v-if="loading"
-    class="flex justify-center items-center min-h-screen">
+    class="flex justify-center items-center min-h-screen"
+  >
+
     <MoonLoader
       :loading="loading"
       color="#fff"
-      size="80px" />
+      size="80px"
+    />
   </div>
 </template>
 
@@ -24,3 +27,4 @@ export default {
   },
 };
 </script>
+

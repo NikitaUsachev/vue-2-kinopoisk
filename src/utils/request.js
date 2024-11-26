@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const BASE_API = process.env.VUE_APP_BASE_API;
 const SECRET_KEY = process.env.VUE_APP_API_KEY;
@@ -12,14 +12,14 @@ service.interceptors.request.use(
   (config) => {
     const conf = config;
 
-    conf.headers['X-API-KEY'] = SECRET_KEY;
-    conf.headers['Content-Type'] = 'application/json';
+    conf.headers["X-API-KEY"] = SECRET_KEY;
+    conf.headers["Content-Type"] = "application/json";
 
     return conf;
   },
   (error) => {
     Promise.reject(error);
-  },
+  }
 );
 
 /* Настройка всех ответов */
@@ -32,11 +32,10 @@ service.interceptors.response.use(
   (error) => {
     /* error status 401, 403, 404, 500 */
     if (error.status === 401) {
-      console.log('logout');
+      console.log("logout");
     }
-
     return Promise.reject(new Error(error));
-  },
+  }
 );
 
 export { BASE_API };

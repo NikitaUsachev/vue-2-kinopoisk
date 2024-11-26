@@ -5,10 +5,10 @@
     />
 
     <div
+      v-if="!loading"
       class="main grid grid-cols-5
       gap-5 w-8/12 mx-auto bg-black p-10
       cursor-pointer"
-      v-if="!loading"
     >
       <div
         v-for="film in favoritesFilms"
@@ -16,14 +16,16 @@
         @click="goToMovie(film.kinopoiskId)"
       >
         <FilmComponent
-          :film="film" @update="toggleFavorite"
+          :film="film"
+          @update="toggleFavorite"
         />
       </div>
     </div>
   </div>
 </template>
+
 <script>
-import { mapGetters, mapActions } from "vuex";
+import index, { mapGetters, mapActions } from "vuex";
 import MoonLoader from '@/components/SpinnerComponent.vue';
 import FilmComponent from "@/components/FilmComponent.vue";
 
@@ -38,6 +40,9 @@ export default {
     };
   },
   computed: {
+    index() {
+      return index
+    },
     ...mapGetters({
       favoritesFilms: "favoritesFilms",
       loading: "loading"
@@ -46,14 +51,14 @@ export default {
   methods: {
     ...mapActions(['getDataFavFilms']),
     toggleFavorite(film) {
-        const index = this.favoritesFilms
-          .findIndex(item => item.id === film.id);
+      const index = this.favoritesFilms
+        .findIndex((item) => item.kinopoiskId === film.kinopoiskId);
 
-        if (index !== -1) {
-          this.$store.commit('REMOVE_FAVORITE_FILM', index);
-        } else {
-          this.$store.commit('ADD_FAVORITE_FILM', film);
-        }
+      if (index !== -1) {
+        this.$store.commit('REMOVE_FAVORITE_FILM', index);
+      } else {
+        this.$store.commit('ADD_FAVORITE_FILM', film);
+      }
     },
     goToMovie(kinopoiskId) {
       this.$router.push(`/movie/${kinopoiskId}`)
